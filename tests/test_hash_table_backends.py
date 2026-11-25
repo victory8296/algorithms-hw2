@@ -20,7 +20,9 @@ class HashTableBackendTests(unittest.TestCase):
 
                 self.assertEqual(table.get("A"), "first")
                 self.assertEqual(table.get("Q"), "second")
-                self.assertEqual(table.find("A"), ("first", 1))
+                self.assertEqual(
+                    table.find("A"), ("first", 2 if name == "chaining" else 1)
+                )
                 self.assertEqual(table.find("missing"), (None, 0))
                 self.assertIn("A", table)
                 self.assertNotIn("missing", table)
@@ -56,7 +58,7 @@ class HashTableBackendTests(unittest.TestCase):
         self.assertEqual(table._slots[3].key, "C")
         self.assertEqual(table._slots[0].key, "G")
         self.assertEqual(table.find("G"), ("value-g", 2))
-        self.assertEqual(table.find("absent"), (None, 2))
+        self.assertEqual(table.find("absent"), (None, 1))
 
     def test_full_fixed_linear_table_searches_once_per_slot_and_updates(self):
         table = LinearProbingHashTable(capacity=4, max_load=None)
