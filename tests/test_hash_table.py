@@ -19,6 +19,7 @@ class HashTableTests(unittest.TestCase):
 
         table.put("A", "updated value")
 
+        self.assertEqual(len(table), 2)
         self.assertEqual(table.get("A"), "updated value")
         self.assertEqual(table.get("Q"), "other value")
 

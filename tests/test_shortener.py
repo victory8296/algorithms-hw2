@@ -18,6 +18,25 @@ class ShortenerTests(unittest.TestCase):
 
         self.assertEqual(shorten(url), first_code)
 
+    def test_assigns_different_codes_to_different_urls(self):
+        first_url = "https://example.com/first"
+        second_url = "https://example.com/second"
+
+        first_code = shorten(first_url)
+        second_code = shorten(second_url)
+
+        self.assertNotEqual(first_code, second_code)
+        self.assertEqual(expand(first_code), first_url)
+        self.assertEqual(expand(second_code), second_url)
+
+    def test_url_length_boundary(self):
+        prefix = "https://example.com/"
+        url = prefix + "a" * (2048 - len(prefix))
+
+        self.assertEqual(expand(shorten(url)), url)
+        with self.assertRaises(ValueError):
+            shorten(url + "a")
+
     def test_rejects_invalid_urls(self):
         invalid_urls = (
             "",
@@ -26,7 +45,6 @@ class ShortenerTests(unittest.TestCase):
             "ftp://example.com",
             "https://",
             "https://example.com/path with space",
-            f"https://example.com/{'a' * 2041}",
         )
 
         for url in invalid_urls:
