@@ -23,7 +23,9 @@ class HashTableBackendTests(unittest.TestCase):
                 self.assertEqual(
                     table.find("A"), ("first", 2 if name == "chaining" else 1)
                 )
-                self.assertEqual(table.find("missing"), (None, 0))
+                self.assertEqual(
+                    table.find("missing"), (None, 0 if name == "chaining" else 1)
+                )
                 self.assertIn("A", table)
                 self.assertNotIn("missing", table)
                 self.assertEqual(len(table), 2)
