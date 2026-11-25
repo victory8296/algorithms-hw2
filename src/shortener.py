@@ -4,11 +4,7 @@ from urllib.parse import urlsplit
 
 from src.base62 import decode, encode
 from src.hash_table import HashTable
-
-
-_url_to_code = HashTable()
-_code_to_url = HashTable()
-_next_id = 0
+from src.linear_probing import LinearProbingHashTable
 
 
 def _validate_url(url: str) -> None:
@@ -32,26 +28,54 @@ def _validate_url(url: str) -> None:
         raise ValueError("url must include a valid hostname")
 
 
+class URLShortener:
+    """URL shortener instance configured with a hash-table backend."""
+
+    def __init__(self, backend: str = "chaining"):
+        if backend == "chaining":
+            table_type = HashTable
+        elif backend == "linear":
+            table_type = LinearProbingHashTable
+        else:
+            raise ValueError("backend must be 'chaining' or 'linear'")
+
+        self.backend = backend
+        self.url_to_code = table_type()
+        self.code_to_url = table_type()
+        self._next_id = 0
+
+    def shorten(self, url: str) -> str:
+        """Return a stable Base62 code for a valid HTTP(S) URL."""
+        _validate_url(url)
+
+        existing_code = self.url_to_code.get(url)
+        if existing_code is not None:
+            return existing_code
+
+        code = encode(self._next_id)
+        self._next_id += 1
+        self.url_to_code.put(url, code)
+        self.code_to_url.put(code, url)
+        return code
+
+    def expand(self, code: str) -> str | None:
+        """Return the original URL for a registered Base62 code."""
+        if not isinstance(code, str):
+            raise ValueError("code must be a Base62 string")
+        decode(code)
+        return self.code_to_url.get(code)
+
+
+_default_shortener = URLShortener()
+_url_to_code = _default_shortener.url_to_code
+_code_to_url = _default_shortener.code_to_url
+
+
 def shorten(url: str) -> str:
-    """Return a stable Base62 code for a valid HTTP(S) URL."""
-    global _next_id
-
-    _validate_url(url)
-
-    existing_code = _url_to_code.get(url)
-    if existing_code is not None:
-        return existing_code
-
-    code = encode(_next_id)
-    _next_id += 1
-    _url_to_code.put(url, code)
-    _code_to_url.put(code, url)
-    return code
+    """Shorten using the default separate-chaining backend."""
+    return _default_shortener.shorten(url)
 
 
 def expand(code: str) -> str | None:
-    """Return the original URL for a registered Base62 code."""
-    if not isinstance(code, str):
-        raise ValueError("code must be a Base62 string")
-    decode(code)
-    return _code_to_url.get(code)
+    """Expand using the default separate-chaining backend."""
+    return _default_shortener.expand(code)

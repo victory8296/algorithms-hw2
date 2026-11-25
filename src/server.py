@@ -6,7 +6,8 @@ import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from urllib.parse import urlsplit
 
-from src.shortener import _url_to_code, expand, shorten
+from src.linear_probing import LinearProbingHashTable
+from src.shortener import URLShortener, _default_shortener
 
 MAX_REQUEST_BODY_BYTES = 1_048_576
 
@@ -29,7 +30,7 @@ class ShortenerHandler(BaseHTTPRequestHandler):
             self._send_html(200, _home_page())
             return
         if path == "/table":
-            self._send_html(200, _table_page())
+            self._send_html(200, _table_page(self._shortener()))
             return
 
         api_prefix = "/api/expand/"
@@ -40,7 +41,7 @@ class ShortenerHandler(BaseHTTPRequestHandler):
         if path.startswith("/") and path.count("/") == 1:
             code = path[1:]
             try:
-                url = expand(code)
+                url = self._shortener().expand(code)
             except ValueError:
                 self.send_error(404, "Short URL not found")
                 return
@@ -63,7 +64,7 @@ class ShortenerHandler(BaseHTTPRequestHandler):
 
         try:
             url = self._read_url()
-            code = shorten(url)
+            code = self._shortener().shorten(url)
         except (UnicodeDecodeError, ValueError) as error:
             self._send_json(400, _json_object("error", str(error)))
             return
@@ -72,7 +73,7 @@ class ShortenerHandler(BaseHTTPRequestHandler):
 
     def _handle_expand(self, code: str) -> None:
         try:
-            url = expand(code)
+            url = self._shortener().expand(code)
         except ValueError as error:
             self._send_json(400, _json_object("error", str(error)))
             return
@@ -81,6 +82,9 @@ class ShortenerHandler(BaseHTTPRequestHandler):
             self.send_error(404, "Short URL not found")
             return
         self._send_json(200, _json_object("url", url))
+
+    def _shortener(self) -> URLShortener:
+        return getattr(self.server, "shortener", _default_shortener)
 
     def _read_url(self) -> str:
         content_length = self.headers.get("Content-Length")
@@ -207,8 +211,14 @@ def _hash_details(key: str, capacity: int, bucket_index: int) -> str:
     )
 
 
-def _table_page() -> str:
-    table = _url_to_code
+def _table_page(shortener: URLShortener) -> str:
+    table = shortener.url_to_code
+    if isinstance(table, LinearProbingHashTable):
+        return _linear_table_page(table)
+    return _chaining_table_page(table)
+
+
+def _chaining_table_page(table) -> str:
     rows = []
     for bucket_index, head in enumerate(table._buckets):
         chain = []
@@ -262,12 +272,89 @@ def _table_page() -> str:
     )
 
 
+def _linear_hash_details(table: LinearProbingHashTable, key: str) -> str:
+    initial, visited, final = table.probe_trace(key)
+    steps = []
+    for character, codepoint, value in table.hash_steps(key):
+        escaped_character = html.escape(repr(character))
+        steps.append(
+            "<li>"
+            f"h = (31 × previous h + ord({escaped_character}) [{codepoint}]) "
+            f"mod {table.capacity} = {value}"
+            "</li>"
+        )
+
+    path = " &rarr; ".join(str(slot) for slot in visited)
+    if final is None:
+        final_display = "not found"
+    else:
+        final_display = f"slot {final}"
+    return (
+        "<details>"
+        f"<summary>Horner hash: initial slot {initial}</summary>"
+        "<p>Start with h = 0, then apply each character from left to right:</p>"
+        f"<ol>{''.join(steps)}</ol>"
+        f"<p>Initial slot: {initial}</p>"
+        f"<p>Actual probe path: {path}</p>"
+        f"<p>Final storage location: {final_display}</p>"
+        "</details>"
+    )
+
+
+def _linear_table_page(table: LinearProbingHashTable) -> str:
+    rows = []
+    for slot_index, entry in enumerate(table._slots):
+        if entry is None:
+            continue
+
+        key = html.escape(entry.key)
+        code = html.escape(entry.value)
+        short_link = f"/{code}"
+        rows.append(
+            f"<tr><th scope=\"row\">{slot_index}</th><td>"
+            '<section class="node">'
+            f"<p><strong>URL key:</strong> <code>{key}</code></p>"
+            f"<p><strong>Short code:</strong> <code>{code}</code></p>"
+            f'<p><strong>Short link:</strong> <a href="{short_link}">'
+            f"{short_link}</a></p>"
+            f"{_linear_hash_details(table, entry.key)}"
+            "</section></td></tr>"
+        )
+
+    return (
+        "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\">"
+        '<meta name="viewport" content="width=device-width, initial-scale=1">'
+        "<title>Linear probing table</title>"
+        "<style>"
+        "body{font:1rem sans-serif;margin:2rem auto;max-width:80rem;padding:0 1rem}"
+        "table{border-collapse:collapse;width:100%}"
+        "th,td{border:1px solid #bbb;padding:.75rem;text-align:left;vertical-align:top}"
+        "th{width:5rem}code{overflow-wrap:anywhere}.node{border:1px solid #888;"
+        "border-radius:.35rem;padding:.5rem;max-width:48rem}.node p{margin:.35rem 0}"
+        "details{margin-top:.5rem}details ol{max-height:24rem;overflow:auto}"
+        "details li{font-family:monospace;font-size:.85rem}"
+        "</style></head><body>"
+        "<h1>Linear probing hash table</h1>"
+        '<p><a href="/">Back to URL shortener</a></p>'
+        f"<p>Capacity: {table.capacity}; entries: {len(table)}; "
+        f"load factor: {table.load_factor:.4f}</p>"
+        "<table><thead><tr><th>Stored slot</th><th>Entry and probe trace</th>"
+        "</tr></thead><tbody>"
+        f"{''.join(rows)}"
+        "</tbody></table></body></html>"
+    )
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Run the URL shortener HTTP server.")
     parser.add_argument("--port", type=int, default=8000)
+    parser.add_argument(
+        "--backend", choices=("chaining", "linear"), default="chaining"
+    )
     arguments = parser.parse_args()
 
     with HTTPServer(("", arguments.port), ShortenerHandler) as server:
+        server.shortener = URLShortener(backend=arguments.backend)
         print(f"URL shortener listening on port {arguments.port}")
         server.serve_forever()
 
