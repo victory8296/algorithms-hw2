@@ -5,6 +5,7 @@ from http.client import HTTPConnection
 from http.server import HTTPServer
 
 from src.server import ShortenerHandler
+from src.shortener import URLShortener
 
 
 class ServerTests(unittest.TestCase):
@@ -102,6 +103,27 @@ class ServerTests(unittest.TestCase):
         self.assertIn(b'class="arrow"', table)
         self.assertIn(b"<details>", table)
         self.assertIn(b"Horner hash", table)
+
+    def test_linear_table_shows_initial_slot_probe_path_and_final_slot(self):
+        self.server.shortener = URLShortener(backend="linear")
+        for url in (
+            "https://table.example/7",
+            "https://table.example/10",
+        ):
+            self.request(
+                "POST",
+                "/shorten",
+                body=json.dumps({"url": url}),
+                headers={"Content-Type": "application/json"},
+            )
+
+        status, _, table = self.request("GET", "/table")
+
+        self.assertEqual(status, 200)
+        self.assertIn(b"Initial slot: 3", table)
+        self.assertIn(b"Actual probe path: 3 &rarr; 4", table)
+        self.assertIn(b"Final storage location: slot 4", table)
+        self.assertIn(b"mod 16", table)
 
 
 if __name__ == "__main__":

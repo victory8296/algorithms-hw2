@@ -38,11 +38,23 @@ class HashTable:
     def __len__(self) -> int:
         return self._size
 
+    @property
+    def load_factor(self) -> float:
+        return self._size / self._capacity
+
     def _bucket_index(self, key: str) -> int:
         value = 0
         for character in key:
             value = (31 * value + ord(character)) % self._capacity
         return value
+
+    def hash_steps(self, key: str) -> list[tuple[str, int, int]]:
+        value = 0
+        steps = []
+        for character in key:
+            value = (31 * value + ord(character)) % self._capacity
+            steps.append((character, ord(character), value))
+        return steps
 
     def put(self, key: str, value: str) -> None:
         if not isinstance(key, str):
@@ -62,16 +74,26 @@ class HashTable:
             while self._size / self._capacity > self._max_load:
                 self._resize()
 
-    def get(self, key: str) -> str | None:
+    def find(self, key: str) -> tuple[str | None, int]:
         if not isinstance(key, str):
             raise TypeError("key must be a string")
 
         node = self._buckets[self._bucket_index(key)]
+        comparisons = 0
         while node is not None:
+            comparisons += 1
             if node.key == key:
-                return node.value
+                return node.value, comparisons
             node = node.next
-        return None
+        return None, comparisons
+
+    def get(self, key: str) -> str | None:
+        return self.find(key)[0]
+
+    def __contains__(self, key: object) -> bool:
+        if not isinstance(key, str):
+            return False
+        return self.find(key)[0] is not None
 
     def _resize(self) -> None:
         old_buckets = self._buckets

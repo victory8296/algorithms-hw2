@@ -1,0 +1,114 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="760" viewBox="0 0 1100 760">
+<rect width="100%" height="100%" fill="white"/>
+<text x="550" y="28" text-anchor="middle" font-family="sans-serif" font-size="20" font-weight="bold">Separate chaining vs. linear probing</text>
+<line x1="130" y1="53" x2="165" y2="53" stroke="#1769aa" stroke-width="3"/>
+<text x="172" y="58" font-family="sans-serif" font-size="12">Chaining measured</text>
+<line x1="365" y1="53" x2="400" y2="53" stroke="#1769aa" stroke-width="3" stroke-dasharray="7 5"/>
+<text x="407" y="58" font-family="sans-serif" font-size="12">Chaining theory</text>
+<line x1="600" y1="53" x2="635" y2="53" stroke="#198754" stroke-width="3"/>
+<text x="642" y="58" font-family="sans-serif" font-size="12">Linear measured</text>
+<line x1="835" y1="53" x2="870" y2="53" stroke="#198754" stroke-width="3" stroke-dasharray="7 5"/>
+<text x="877" y="58" font-family="sans-serif" font-size="12">Linear theory</text>
+<text x="100" y="87" font-family="sans-serif" font-size="16" font-weight="bold">Successful searches</text>
+<line x1="100" y1="303.00" x2="1040" y2="303.00" stroke="#dddddd"/>
+<text x="88" y="307.00" text-anchor="end" font-family="sans-serif" font-size="12">0</text>
+<line x1="100" y1="268.83" x2="1040" y2="268.83" stroke="#dddddd"/>
+<text x="88" y="272.83" text-anchor="end" font-family="sans-serif" font-size="12">1</text>
+<line x1="100" y1="234.67" x2="1040" y2="234.67" stroke="#dddddd"/>
+<text x="88" y="238.67" text-anchor="end" font-family="sans-serif" font-size="12">2</text>
+<line x1="100" y1="200.50" x2="1040" y2="200.50" stroke="#dddddd"/>
+<text x="88" y="204.50" text-anchor="end" font-family="sans-serif" font-size="12">3</text>
+<line x1="100" y1="166.33" x2="1040" y2="166.33" stroke="#dddddd"/>
+<text x="88" y="170.33" text-anchor="end" font-family="sans-serif" font-size="12">4</text>
+<line x1="100" y1="132.17" x2="1040" y2="132.17" stroke="#dddddd"/>
+<text x="88" y="136.17" text-anchor="end" font-family="sans-serif" font-size="12">5</text>
+<line x1="100" y1="98.00" x2="1040" y2="98.00" stroke="#dddddd"/>
+<text x="88" y="102.00" text-anchor="end" font-family="sans-serif" font-size="12">6</text>
+<line x1="100.00" y1="98" x2="100.00" y2="303" stroke="#eeeeee"/>
+<text x="100.00" y="323" text-anchor="middle" font-family="sans-serif" font-size="12">0.0</text>
+<line x1="288.00" y1="98" x2="288.00" y2="303" stroke="#eeeeee"/>
+<text x="288.00" y="323" text-anchor="middle" font-family="sans-serif" font-size="12">0.2</text>
+<line x1="476.00" y1="98" x2="476.00" y2="303" stroke="#eeeeee"/>
+<text x="476.00" y="323" text-anchor="middle" font-family="sans-serif" font-size="12">0.4</text>
+<line x1="664.00" y1="98" x2="664.00" y2="303" stroke="#eeeeee"/>
+<text x="664.00" y="323" text-anchor="middle" font-family="sans-serif" font-size="12">0.6</text>
+<line x1="852.00" y1="98" x2="852.00" y2="303" stroke="#eeeeee"/>
+<text x="852.00" y="323" text-anchor="middle" font-family="sans-serif" font-size="12">0.8</text>
+<line x1="1040.00" y1="98" x2="1040.00" y2="303" stroke="#eeeeee"/>
+<text x="1040.00" y="323" text-anchor="middle" font-family="sans-serif" font-size="12">1.0</text>
+<polyline points="193.93,267.29 288.09,266.04 382.02,264.00 475.95,261.90 569.89,260.40 664.05,258.78 757.98,257.00 851.91,255.11 946.07,253.22" fill="none" stroke="#1769aa" stroke-width="2.5"/>
+<circle cx="193.93" cy="267.29" r="3" fill="#1769aa"/>
+<circle cx="288.09" cy="266.04" r="3" fill="#1769aa"/>
+<circle cx="382.02" cy="264.00" r="3" fill="#1769aa"/>
+<circle cx="475.95" cy="261.90" r="3" fill="#1769aa"/>
+<circle cx="569.89" cy="260.40" r="3" fill="#1769aa"/>
+<circle cx="664.05" cy="258.78" r="3" fill="#1769aa"/>
+<circle cx="757.98" cy="257.00" r="3" fill="#1769aa"/>
+<circle cx="851.91" cy="255.11" r="3" fill="#1769aa"/>
+<circle cx="946.07" cy="253.22" r="3" fill="#1769aa"/>
+<polyline points="193.93,267.13 288.09,265.41 382.02,263.71 475.95,262.00 569.89,260.29 664.05,258.58 757.98,256.88 851.91,255.17 946.07,253.46" fill="none" stroke="#1769aa" stroke-width="2.5" stroke-dasharray="7 5"/>
+<polyline points="193.93,266.96 288.09,265.51 382.02,261.74 475.95,257.35 569.89,251.49 664.05,244.81 757.98,231.38 851.91,205.35 946.07,122.09" fill="none" stroke="#198754" stroke-width="2.5"/>
+<circle cx="193.93" cy="266.96" r="3" fill="#198754"/>
+<circle cx="288.09" cy="265.51" r="3" fill="#198754"/>
+<circle cx="382.02" cy="261.74" r="3" fill="#198754"/>
+<circle cx="475.95" cy="257.35" r="3" fill="#198754"/>
+<circle cx="569.89" cy="251.49" r="3" fill="#198754"/>
+<circle cx="664.05" cy="244.81" r="3" fill="#198754"/>
+<circle cx="757.98" cy="231.38" r="3" fill="#198754"/>
+<circle cx="851.91" cy="205.35" r="3" fill="#198754"/>
+<circle cx="946.07" cy="122.09" r="3" fill="#198754"/>
+<polyline points="193.93,266.94 288.09,264.56 382.02,261.51 475.95,257.45 569.89,251.76 664.05,243.20 757.98,228.98 851.91,200.54 946.07,114.96" fill="none" stroke="#198754" stroke-width="2.5" stroke-dasharray="7 5"/>
+<line x1="100" y1="303" x2="1040" y2="303" stroke="#333333"/>
+<text x="570.00" y="345" text-anchor="middle" font-family="sans-serif" font-size="13">Load factor (alpha)</text>
+<text x="22" y="200.50" transform="rotate(-90 22 200.50)" text-anchor="middle" font-family="sans-serif" font-size="13">Average probes</text>
+<text x="100" y="427" font-family="sans-serif" font-size="16" font-weight="bold">Failed searches</text>
+<line x1="100" y1="643.00" x2="1040" y2="643.00" stroke="#dddddd"/>
+<text x="88" y="647.00" text-anchor="end" font-family="sans-serif" font-size="12">0</text>
+<line x1="100" y1="605.73" x2="1040" y2="605.73" stroke="#dddddd"/>
+<text x="88" y="609.73" text-anchor="end" font-family="sans-serif" font-size="12">10</text>
+<line x1="100" y1="568.45" x2="1040" y2="568.45" stroke="#dddddd"/>
+<text x="88" y="572.45" text-anchor="end" font-family="sans-serif" font-size="12">20</text>
+<line x1="100" y1="531.18" x2="1040" y2="531.18" stroke="#dddddd"/>
+<text x="88" y="535.18" text-anchor="end" font-family="sans-serif" font-size="12">30</text>
+<line x1="100" y1="493.91" x2="1040" y2="493.91" stroke="#dddddd"/>
+<text x="88" y="497.91" text-anchor="end" font-family="sans-serif" font-size="12">40</text>
+<line x1="100" y1="456.64" x2="1040" y2="456.64" stroke="#dddddd"/>
+<text x="88" y="460.64" text-anchor="end" font-family="sans-serif" font-size="12">50</text>
+<line x1="100.00" y1="438" x2="100.00" y2="643" stroke="#eeeeee"/>
+<text x="100.00" y="663" text-anchor="middle" font-family="sans-serif" font-size="12">0.0</text>
+<line x1="288.00" y1="438" x2="288.00" y2="643" stroke="#eeeeee"/>
+<text x="288.00" y="663" text-anchor="middle" font-family="sans-serif" font-size="12">0.2</text>
+<line x1="476.00" y1="438" x2="476.00" y2="643" stroke="#eeeeee"/>
+<text x="476.00" y="663" text-anchor="middle" font-family="sans-serif" font-size="12">0.4</text>
+<line x1="664.00" y1="438" x2="664.00" y2="643" stroke="#eeeeee"/>
+<text x="664.00" y="663" text-anchor="middle" font-family="sans-serif" font-size="12">0.6</text>
+<line x1="852.00" y1="438" x2="852.00" y2="643" stroke="#eeeeee"/>
+<text x="852.00" y="663" text-anchor="middle" font-family="sans-serif" font-size="12">0.8</text>
+<line x1="1040.00" y1="438" x2="1040.00" y2="643" stroke="#eeeeee"/>
+<text x="1040.00" y="663" text-anchor="middle" font-family="sans-serif" font-size="12">1.0</text>
+<polyline points="193.93,642.63 288.09,642.22 382.02,641.87 475.95,641.48 569.89,641.13 664.05,640.80 757.98,640.39 851.91,640.05 946.07,639.68" fill="none" stroke="#1769aa" stroke-width="2.5"/>
+<circle cx="193.93" cy="642.63" r="3" fill="#1769aa"/>
+<circle cx="288.09" cy="642.22" r="3" fill="#1769aa"/>
+<circle cx="382.02" cy="641.87" r="3" fill="#1769aa"/>
+<circle cx="475.95" cy="641.48" r="3" fill="#1769aa"/>
+<circle cx="569.89" cy="641.13" r="3" fill="#1769aa"/>
+<circle cx="664.05" cy="640.80" r="3" fill="#1769aa"/>
+<circle cx="757.98" cy="640.39" r="3" fill="#1769aa"/>
+<circle cx="851.91" cy="640.05" r="3" fill="#1769aa"/>
+<circle cx="946.07" cy="639.68" r="3" fill="#1769aa"/>
+<polyline points="193.93,642.63 288.09,642.25 382.02,641.88 475.95,641.51 569.89,641.14 664.05,640.76 757.98,640.39 851.91,640.02 946.07,639.65" fill="none" stroke="#1769aa" stroke-width="2.5" stroke-dasharray="7 5"/>
+<polyline points="193.93,638.83 288.09,638.22 382.02,637.20 475.95,635.81 569.89,633.78 664.05,630.65 757.98,621.70 851.91,600.86 946.07,511.88" fill="none" stroke="#198754" stroke-width="2.5"/>
+<circle cx="193.93" cy="638.83" r="3" fill="#198754"/>
+<circle cx="288.09" cy="638.22" r="3" fill="#198754"/>
+<circle cx="382.02" cy="637.20" r="3" fill="#198754"/>
+<circle cx="475.95" cy="635.81" r="3" fill="#198754"/>
+<circle cx="569.89" cy="633.78" r="3" fill="#198754"/>
+<circle cx="664.05" cy="630.65" r="3" fill="#198754"/>
+<circle cx="757.98" cy="621.70" r="3" fill="#198754"/>
+<circle cx="851.91" cy="600.86" r="3" fill="#198754"/>
+<circle cx="946.07" cy="511.88" r="3" fill="#198754"/>
+<polyline points="193.93,638.84 288.09,638.22 382.02,637.33 475.95,635.96 569.89,633.69 664.05,629.49 757.98,620.43 851.91,594.59 946.07,454.50" fill="none" stroke="#198754" stroke-width="2.5" stroke-dasharray="7 5"/>
+<line x1="100" y1="643" x2="1040" y2="643" stroke="#333333"/>
+<text x="570.00" y="685" text-anchor="middle" font-family="sans-serif" font-size="13">Load factor (alpha)</text>
+<text x="22" y="540.50" transform="rotate(-90 22 540.50)" text-anchor="middle" font-family="sans-serif" font-size="13">Average probes</text>
+</svg>
